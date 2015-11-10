@@ -7,8 +7,8 @@
 #include <fstream>
 
 
-void read_FLN(std::vector<std::vector<double> > &mat, std::string fname){
-	ifstream infile;
+void read_mat(std::vector<std::vector<double> > &mat, std::string fname){
+	std::ifstream infile;
 	infile.open(fname);
 	
 	std::string line;

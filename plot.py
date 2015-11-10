@@ -1,12 +1,15 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from pylab import rcParams
+import sys
+
 
 h = np.genfromtxt('h.csv')
 cost = np.genfromtxt('cost.csv')
 costl = np.genfromtxt('costl.csv')
 SLN = np.genfromtxt("SLN.csv",delimiter=';')
 SLNpred = np.genfromtxt("SLNpredicted.csv",delimiter=';')
+FLN = np.genfromtxt("FLN.csv",delimiter=';')
 
 
 order = ["V1","V2","V4","DP","MT","8m",
@@ -47,7 +50,8 @@ plt.xticks(range(29),order,rotation=90.)
 plt.subplot2grid(grid_size, (0,3),rowspan=3,colspan=2)
 for i in range(len(SLN)):
 	for j in range(len(SLN[i])):
-		plt.scatter(SLN[i][j],SLNpred[i][j])
+		if FLN[i][j] != 0 and i!=j:
+			plt.scatter(SLN[i][j],SLNpred[i][j])
 plt.xlabel("observed SLN")
 plt.ylabel("predicted SLN")
 
