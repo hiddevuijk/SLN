@@ -20,26 +20,26 @@ int main()
 		"STPi","ProM","F7","8B","STPr","24c"};
 
 	ifstream infile;
-	infile.open("JCN_2013_Table.csv");
+	infile.open("data.csv");
 	if(!infile) cout << "Could not read file!!!" << endl;
 
-	vector<vector<string> > table(628);
+	vector<vector<string> > table(1602);
 	vector<string> sources;
 	vector<string> targets;
 	string line;
 	vector<int> del_pos;
 	vector<string> head;
-	getline(infile,line,'\r');
-	del_pos = find_char(line,';');
-	
+	getline(infile,line,'\n');
+	del_pos = find_char(line,',');
+
 	head.push_back(line.substr(0,del_pos[0]));
 	head.push_back(line.substr(del_pos[0]+1,del_pos[1]-del_pos[0]-1));
 	head.push_back(line.substr(del_pos[1]+1,del_pos[2]-del_pos[1]-1));
 	head.push_back(line.substr(del_pos[2]+1,del_pos[3]-del_pos[2]-1));
 
 	for(int i=0; i<table.size();i++) {
-		getline(infile,line,'\r');
-		del_pos = find_char(line,';');
+		getline(infile,line,'\n');
+		del_pos = find_char(line,',');
 
 		table[i].push_back(line.substr(0,del_pos[0]));
 		table[i].push_back(line.substr(del_pos[0]+1,del_pos[1]-del_pos[0]-1));
@@ -48,32 +48,20 @@ int main()
 
 	}
 	infile.close();
-	
-	int  count = 0;
-	for(int i=0;i<table.size();i++){
-		if(str_in_vec(table[i][1],sources)==false) {
-			sources.push_back(table[i][1]);
-		}
-		if(str_in_vec(table[i][0],targets)==false) {
-			targets.push_back(table[i][0]);
-		}
-	}
 
-	for (int i=0;i<sources.size();i++) {
-		cout << sources[i] << '\t';
-		if((i+1)%5==0) cout << '\n';
-	}
 
-	cout << endl << endl << endl;
-	for(int i=0;i<targets.size();i++) {
-		cout << targets[i] << '\t';
-		if((i+1)%5==0) cout << '\n';
-	}
-	cout <<endl << endl;
+//	for(int i=0;i<table.size();i++){
+//		if(str_in_vec(table[i][1],sources)==false) {
+//			sources.push_back(table[i][1]);
+//		}
+//		if(str_in_vec(table[i][0],targets)==false) {
+//			targets.push_back(table[i][0]);
+//		}
+//	}
+//
+
 	vector<double> doubvec(29,0.0);
-	vector<int> intvec(29,0);
 	vector<vector<double> > SLN(29,doubvec);
-	vector<vector<int> > n_measure(29,intvec);
 
 	string ss,st;
 	for(int i=0;i<table.size();i++) {
@@ -84,15 +72,11 @@ int main()
 
 			int ns = where_in_vec(ss,order);
 			int nt = where_in_vec(st,order);
-			SLN[nt][ns] += stod(table[i][2]);
-			n_measure[nt][ns] += 1;
+			SLN[nt][ns] += stod(table[i][3]);
 		}
 	}
-	for(int i=0;i<SLN.size();i++){
-		for(int j=0;j<SLN[i].size();j++) {
-			SLN[i][j] /= 100.;
-		}
-	}
+
+
 	
 	ofstream SLN_out("SLN.csv");
 	for(int i=0;i<SLN.size();i++) {
@@ -102,6 +86,9 @@ int main()
 		}
 		SLN_out << '\n';
 	}	
+
+	ofstream order_out("order.txt");
+	for(int i=0;i<order.size();i++) order_out << order[i] << '\n';
 
 	return 0;
 
