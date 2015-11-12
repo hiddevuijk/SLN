@@ -17,6 +17,17 @@ order = ["V1","V2","V4","DP","MT","8m",
 		"9/46v","9/46d","F5","TEpd","PBr","7m","7B","F2",
 		"STPi","ProM","F7","8B","STPr","24c"]
 
+SLNvec = []
+SLNpredvec = []
+for i in range(len(SLN)):
+	for j in range(len(SLN[i])):
+		if FLN[i][j] != 0:
+			SLNvec.append(SLN[i][j])
+			SLNpredvec.append(SLNpred[i][j])
+corr = np.corrcoef(SLNvec,SLNpredvec)[0][1]
+
+
+
 hnorm = h/max(h)
 hnorm_sort = sorted(hnorm)
 
@@ -54,6 +65,8 @@ for i in range(len(SLN)):
 			plt.scatter(SLN[i][j],SLNpred[i][j])
 plt.xlabel("observed SLN")
 plt.ylabel("predicted SLN")
+plt.title("r^2 = %f" % corr)
+
 
 plt.subplot2grid(grid_size,(3,3), rowspan=3,colspan=2)
 plt.plot(hnorm,sort_index,'o')

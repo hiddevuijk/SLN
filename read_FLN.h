@@ -24,6 +24,3 @@ void read_mat(std::vector<std::vector<double> > &mat, std::string fname){
 }
 #endif
 
-
-
-

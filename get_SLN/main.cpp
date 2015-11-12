@@ -64,9 +64,10 @@ int main()
 	vector<vector<double> > SLN(29,doubvec);
 
 	string ss,st;
+	int count = 0;
 	for(int i=0;i<table.size();i++) {
 		if(str_in_vec(table[i][0],order)&&str_in_vec(table[i][1],order) ) {
-			
+			count++;			
 			ss = table[i][1];
 			st = table[i][0];
 
@@ -75,7 +76,7 @@ int main()
 			SLN[nt][ns] += stod(table[i][3]);
 		}
 	}
-
+	cout << count << endl;
 
 	
 	ofstream SLN_out("SLN.csv");

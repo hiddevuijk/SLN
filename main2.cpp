@@ -7,7 +7,7 @@
 #include <fstream>
 #include <cmath>
 
-#include "cost.h"
+#include "cost2.h"
 #include "read_FLN.h"
 
 using namespace::std;
@@ -18,7 +18,7 @@ int main()
 
 	double alpha = 1e-4;
 	double mu = 5e-4;
-	int MAXSTEP = 1e3;
+	int MAXSTEP = 1;
 
 	vector<double> vec_doub(29,0.0);
 	vector<vector<double> > SLN(29,vec_doub);
@@ -34,7 +34,7 @@ int main()
 
 	vector<double> costsl;
 	vector<double> costs;
-
+	int N =29;
 	ifstream h_in;
 	double hmax = 0.0;
 	h_in.open("ha.csv");
@@ -44,11 +44,23 @@ int main()
 	}
 	for(int i=0;i<h.size();i++) h[i] /= hmax;
 
+	double SLNavg = mean_mat(SLN,N);
+	double SLNvar = var_mat(SLN,N,SLNavg);
+	double SLNpredavg = 0.0;
+	double SLNpredvar = 0.0;
 	double hm = 0.0;
 	vector<double> htemp = h;
 	for(int step=0;step<MAXSTEP;step++) {
+		
+		for(int i=0;i<N;i++) for(int j=0;j<N;j++) {
+			SLNpred[i][j] = logfunc(h[i]-h[j]);
+		}
+		SLNpredavg = mean_mat(SLNpred,N);
+		SLNpredvar = var_mat(SLNpred,N,SLNpredavg);
+
 		for(int j=1;j<h.size();j++) {
-			htemp[j] = h[j]-alpha*difcostl(SLN,FLN,h,j,mu);
+			htemp[j] = h[j] + alpha*difcost(SLN,SLNavg,SLNvar,SLNpred,SLNpredavg,SLNpredvar,FLN,h,N,j,mu);
+//			htemp[j] = h[j]-alpha*difcostl(SLN,FLN,h,j,mu);
 
 		}
 //		hm= 0.0;
@@ -57,8 +69,8 @@ int main()
 //		for(int i=0;i<h.size();i++)
 //			h[i] /= hm;
 		h=htemp;
-		costs.push_back(cost(SLN,FLN,h));
-		costsl.push_back(costl(SLN,FLN,h,mu));
+		costs.push_back(cost(SLN,SLNavg,SLNvar,SLNpred,SLNpredavg,SLNpredvar,FLN,h,N,mu));
+		costsl.push_back(costs[step]);
 	}
 
 
