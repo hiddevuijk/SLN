@@ -16,9 +16,9 @@ using namespace::std;
 int main()
 {
 
-	double alpha = 1e-4;
-	double mu = 5e-4;
-	int MAXSTEP = 1;
+	double alpha = 1e-3;
+	double mu = 5e-3;
+	int MAXSTEP = 5e2;
 
 	vector<double> vec_doub(29,0.0);
 	vector<vector<double> > SLN(29,vec_doub);
@@ -39,7 +39,8 @@ int main()
 	double hmax = 0.0;
 	h_in.open("ha.csv");
 	for(int i=0;i<h.size();i++){
-		h_in >> h[i];
+//		h_in >> h[i];
+		h[i] = i;
 		if(h[i] > hmax ) hmax = h[i];
 	}
 	for(int i=0;i<h.size();i++) h[i] /= hmax;

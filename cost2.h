@@ -14,9 +14,9 @@ double cost (const std::vector<std::vector<double> >& SLN, const double& SLNavg,
 	double temp2 = 0.0;
 	for(int i=0;i<N;i++) {
 		for(int j=0;j<N;j++) if(FLN[i][j]!=0) {
-			temp += SLN[i][j]*(SLNpred[i][j]-SLNpredavg);
+			temp += log(FLN[i][j])*SLN[i][j]*(SLNpred[i][j]-SLNpredavg);
 		}
-//		temp2 -= std::log(h[i]);
+		if(i!=0) temp2 -= std::log(h[i]);
 	}
 
 	return (temp/((N*N-1)*SLNvar*SLNpredvar)) - mu*temp2;
@@ -36,17 +36,17 @@ double difcost (const std::vector<std::vector<double> >& SLN, const double& SLNa
 	double temp6 = 0.0;
 	for(int i=0;i<N;i++) {
 		temp1 += diflogfunc(h[k]-h[i]);
-//		temp6 += -1.*mu/h[i];
+		if(i!=0) temp6 += -1.*mu/h[i];
 		temp3 = 0.0;
 		for(int j=0;j<N;j++) {
 			if(FLN[i][j] !=0 ){
-				temp2 += SLN[i][j]*(SLNpred[i][j]-SLNpredavg);
+				temp2 += log(FLN[i][j])*SLN[i][j]*(SLNpred[i][j]-SLNpredavg);
 				for(int n=0;n<N;n++) {
-					temp3 += SLN[i][j]*diflogfunc(h[k]-h[n]);
+					temp3 += log(FLN[i][j])*SLN[i][j]*diflogfunc(h[k]-h[n]);
 				}
 			}
 		}
-		temp4 += ((SLN[k][i]-SLN[i][k])*diflogfunc(h[k]-h[i])-2.*temp3/(N*N));
+		if(FLN[k][i] != 0 && FLN[k][i]!=0) temp4 += ((log(FLN[k][i])*SLN[k][i]-log(FLN[k][i])*SLN[i][k])*diflogfunc(h[k]-h[i])-2.*temp3/(N*N));
 	}
 	temp5 = 1./((N*N-1)*SLNpredvar*SLNpredvar);
 	temp2 = temp2*temp1*(1.+2*SLNpredavg)/(2*N*N*SLNpredvar*SLNpredvar);

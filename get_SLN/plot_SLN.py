@@ -22,7 +22,7 @@ for i in range(len(SLN)):
 my_cmap = mpl.colors.LinearSegmentedColormap.from_list("my_colormap",['blue','black','red'],256)
 
 
-my_cmap.set_under('grey')
+my_cmap.set_under('0.7')
 
 plt.imshow(SLN,cmap=my_cmap,interpolation='nearest',vmin=0,vmax=1)
 plt.xticks(range(29),areas,rotation=90.)

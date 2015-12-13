@@ -67,13 +67,13 @@ int main()
 	int count = 0;
 	for(int i=0;i<table.size();i++) {
 		if(str_in_vec(table[i][0],order)&&str_in_vec(table[i][1],order) ) {
-			count++;			
 			ss = table[i][1];
 			st = table[i][0];
 
 			int ns = where_in_vec(ss,order);
 			int nt = where_in_vec(st,order);
 			SLN[nt][ns] += stod(table[i][3]);
+			if(SLN[nt][ns] == 1) count++;
 		}
 	}
 	cout << count << endl;
